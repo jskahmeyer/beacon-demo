@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsFeatureFlags": "EnableHttpStreaming",
+    "COSMOS_ENDPOINT": "https://<your-account>.documents.azure.com:443/",
+    "COSMOS_KEY": "<your-cosmos-primary-key>",
+    "COSMOS_DATABASE": "beaconSignalDemo",
+    "COSMOS_CONTAINER": "sites",
+    "ANTHROPIC_API_KEY": "<your-anthropic-api-key>"
+  }
+}
