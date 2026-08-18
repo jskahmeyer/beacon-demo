@@ -23,21 +23,25 @@ export default function App() {
   const selectedSite = sites.find((s) => s.id === selectedId) ?? null;
 
   return (
-    <div className="app">
+    <>
       <header>
-        <h1>Program Risk Monitor</h1>
-        <p className="subtitle">Proof-of-concept dashboard — entirely synthetic data</p>
+        <div className="header-inner">
+          <h1>Program Risk Monitor</h1>
+          <p className="subtitle">Proof-of-concept dashboard — entirely synthetic data</p>
+        </div>
       </header>
 
-      {loading && <p style={{ padding: "0 24px" }}>Loading sites…</p>}
-      {error && <p className="error">{error}</p>}
+      <div className="app">
+        {loading && <p style={{ padding: "0 24px" }}>Loading sites…</p>}
+        {error && <p className="error">{error}</p>}
 
-      {!loading && !error && (
-        <div className="layout">
-          <SiteTable sites={sites} selectedId={selectedId} onSelect={setSelectedId} />
-          {selectedSite && <SiteDetail site={selectedSite} />}
-        </div>
-      )}
-    </div>
+        {!loading && !error && (
+          <div className="layout">
+            <SiteTable sites={sites} selectedId={selectedId} onSelect={setSelectedId} />
+            {selectedSite && <SiteDetail site={selectedSite} />}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

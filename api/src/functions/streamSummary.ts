@@ -47,19 +47,9 @@ app.http("streamSummary", {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        Connection: "keep-alive",
+        "Connection": "keep-alive",
       },
       body,
     };
   },
 });
-
-/*
-FALLBACK (if HTTP streaming preview isn't available in your environment):
-Replace the handler above with a version that awaits the full text via
-`getRiskAssessment`-style non-streaming call and returns
-`jsonBody: { summary: fullText }` instead of a ReadableStream. Have the
-frontend render it all at once instead of token-by-token. You'd lose the
-"streaming" part of the demo but keep Cosmos DB, Azure Functions, and the
-LLM integration itself intact.
-*/
