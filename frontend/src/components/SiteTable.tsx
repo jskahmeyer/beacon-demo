@@ -19,7 +19,7 @@ export function SiteTable({
           <th>Days Since Assessment</th>
           <th>Incidents (90d)</th>
           <th>Staff Turnover</th>
-          <th>Baseline Tier</th>
+          <th>Baseline Risk</th>
         </tr>
       </thead>
       <tbody>
