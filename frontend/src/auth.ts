@@ -6,10 +6,17 @@ export interface ClientPrincipal {
 }
 
 export async function fetchCurrentUser(): Promise<ClientPrincipal | null> {
-  const res = await fetch("/.auth/me");
-  if (!res.ok) return null;
-  const { clientPrincipal } = await res.json();
-  return clientPrincipal ?? null;
+  try {
+    const res = await fetch("/.auth/me");
+    if (!res.ok) return null;
+    const { clientPrincipal } = await res.json();
+    return clientPrincipal ?? null;
+  } catch {
+    // Locally there's no real /.auth/me endpoint — Vite's dev server SPA-falls-back
+    // to index.html (a 200 with HTML), which fails to parse as JSON. Treat that the
+    // same as "not signed in" rather than crashing.
+    return null;
+  }
 }
 
 // SWA's /.auth/logout only clears its own session cookie — it doesn't end
