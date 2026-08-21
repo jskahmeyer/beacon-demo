@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SiteMetrics } from "./types";
 import { fetchSites } from "./api";
-import { ClientPrincipal, fetchCurrentUser } from "./auth";
+import { ClientPrincipal, fetchCurrentUser, getLogoutUrl } from "./auth";
 import { SiteTable } from "./components/SiteTable";
 import { SiteDetail } from "./components/SiteDetail";
 
@@ -37,7 +37,7 @@ export default function App() {
           {user && (
             <div className="header-user">
               <span>{user.userDetails}</span>
-              <a href="/.auth/logout">Sign out</a>
+              <a href={getLogoutUrl()}>Sign out</a>
             </div>
           )}
         </div>
