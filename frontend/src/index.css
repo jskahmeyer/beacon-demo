@@ -43,6 +43,24 @@ header {
   max-width: 1200px;
   margin: 0 auto;
   padding: 28px 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #cfe3ee;
+  white-space: nowrap;
+}
+
+.header-user a {
+  color: #fff;
+  text-decoration: underline;
 }
 
 header h1 {

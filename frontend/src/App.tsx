@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { SiteMetrics } from "./types";
 import { fetchSites } from "./api";
+import { ClientPrincipal, fetchCurrentUser } from "./auth";
 import { SiteTable } from "./components/SiteTable";
 import { SiteDetail } from "./components/SiteDetail";
 
@@ -9,6 +10,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<ClientPrincipal | null>(null);
 
   useEffect(() => {
     fetchSites()
@@ -18,6 +20,8 @@ export default function App() {
       })
       .catch(() => setError("Couldn't load site data."))
       .finally(() => setLoading(false));
+
+    fetchCurrentUser().then(setUser);
   }, []);
 
   const selectedSite = sites.find((s) => s.id === selectedId) ?? null;
@@ -26,8 +30,16 @@ export default function App() {
     <>
       <header>
         <div className="header-inner">
-          <h1>Program Risk Monitor</h1>
-          <p className="subtitle">Proof-of-concept dashboard — entirely synthetic data</p>
+          <div className="header-titles">
+            <h1>Program Risk Monitor</h1>
+            <p className="subtitle">Proof-of-concept dashboard — entirely synthetic data</p>
+          </div>
+          {user && (
+            <div className="header-user">
+              <span>{user.userDetails}</span>
+              <a href="/.auth/logout">Sign out</a>
+            </div>
+          )}
         </div>
       </header>
 
