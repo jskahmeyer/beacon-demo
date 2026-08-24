@@ -19,6 +19,21 @@
   border: 0;
 }
 
+/* Blanket reset rather than per-component media queries — covers the
+   re-run spinner, skeleton shimmer, streaming cursor blink, and the
+   gauge's width transition in one place, and doesn't need updating if
+   more animation is added later. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   margin: 0;
   background: var(--bg);
