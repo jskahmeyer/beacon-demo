@@ -48,7 +48,7 @@ export default function App() {
     });
   }, []);
 
-  const selectedSite = sites.find((s) => s.id === selectedId) ?? null;
+  const selectedSite = sites.find((s) => s.id === selectedId);
 
   const handleActionUpdate = (
     siteId: string,

@@ -22,7 +22,7 @@ app.http("updateSiteAction", {
         return {
           status: 400,
           jsonBody: {
-            error: `Cannot move from "${current}" to "${status}". Expected "${NEXT_STATUS[current]}".`,
+            error: `Cannot move from "${current}" to "${status}". Expected "${NEXT_STATUS[current] ?? "no further transitions"}".`,
           },
         };
       }

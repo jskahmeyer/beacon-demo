@@ -18,5 +18,11 @@ export function isValidTransition(
   current: ActionState,
   requested: string | undefined
 ): requested is ActionStatus {
-  return requested === NEXT_STATUS[current];
+  // NEXT_STATUS[current] is only guaranteed defined if `current` actually
+  // matches the ActionState type — true for anything the app itself
+  // writes, but Cosmos data isn't runtime-validated, so a corrupted or
+  // legacy actionStatus could make it undefined. Without this guard, a
+  // request with no `status` field (requested === undefined) would
+  // incorrectly pass as a valid transition in that case.
+  return requested !== undefined && requested === NEXT_STATUS[current];
 }
