@@ -22,9 +22,19 @@ body {
 
 .layout {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
+  /* minmax(0, ...) — not bare 1.4fr/1fr — matters here: grid tracks
+     otherwise default to a minimum width of their content's min-content
+     size, so a narrow viewport can't actually shrink the columns and the
+     detail panel overlaps the table instead of reflowing. */
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: var(--space-7);
   padding: 0 var(--space-8);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .error {

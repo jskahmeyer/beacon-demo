@@ -15,13 +15,15 @@ header {
   margin: 0 auto;
   padding: var(--space-8) var(--space-9);
   display: flex;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-6);
+  gap: var(--space-6) var(--space-6);
 }
 
 .header-user {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-5);
   font-size: var(--font-sm);

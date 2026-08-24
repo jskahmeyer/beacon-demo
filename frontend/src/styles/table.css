@@ -1,3 +1,12 @@
+.table-scroll {
+  overflow-x: auto;
+  /* Matches .site-table's own radius. When the table is wider than this
+     container and scrolled, the table's rounded corner is off-screen —
+     what's actually visible at the edge is this container's box, so it
+     needs the same radius or you get a square cut-off instead. */
+  border-radius: 10px;
+}
+
 .site-table {
   width: 100%;
   border-collapse: collapse;
@@ -40,4 +49,21 @@
 
 .no-action {
   color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  /* Below the .layout stacking breakpoint, let the table keep its
+     natural (unwrapped) column widths and scroll horizontally instead
+     of squeezing every column's text onto multiple lines — much more
+     legible for a data-dense table than letting cells go tall and
+     narrow. Scoped to this breakpoint only, so desktop rendering (where
+     site names already wrap across two lines by design) is untouched. */
+  .site-table {
+    min-width: 640px;
+
+    th,
+    td {
+      white-space: nowrap;
+    }
+  }
 }

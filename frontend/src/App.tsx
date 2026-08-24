@@ -83,7 +83,7 @@ export default function App() {
         <div className="header-inner">
           <div className="header-titles">
             <h1>Program Risk Monitor</h1>
-            <p className="subtitle">Proof-of-concept dashboard — entirely synthetic data</p>
+            <p className="subtitle">Proof-of-concept dashboard</p>
           </div>
           {user && (
             <div className="header-user">
