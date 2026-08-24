@@ -1,0 +1,34 @@
+.badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: var(--space-0) var(--space-4);
+  border-radius: 999px;
+  font-size: var(--font-2xs);
+  font-weight: 700;
+}
+
+.badge-low,
+.badge-resolved {
+  background: var(--low-bg);
+  color: var(--low-text);
+}
+
+.badge-moderate {
+  background: var(--moderate-bg);
+  color: var(--moderate-text);
+}
+
+.badge-high {
+  background: var(--high-bg);
+  color: var(--high-text);
+}
+
+.badge-flagged {
+  background: var(--flagged-bg);
+  color: var(--flagged-text);
+}
+
+.badge-acknowledged {
+  background: var(--acknowledged-bg);
+  color: var(--acknowledged-text);
+}
