@@ -81,8 +81,11 @@ header {
   gap: var(--space-3);
   background: var(--yellow);
   color: var(--navy-dark);
+  font: inherit;
   font-weight: 700;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
   padding: var(--space-4) var(--space-8);
   border-radius: 6px;
 

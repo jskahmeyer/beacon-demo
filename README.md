@@ -1,6 +1,6 @@
 # Program Risk Monitor
 
-A proof-of-contept dashboard for reviewing program-site risk and driving follow-up
+A proof-of-concept dashboard for reviewing program-site risk and driving follow-up
 action, built with React, Azure Functions, Cosmos DB, and the Claude API, and hosted on Azure Static Apps.
 All data is entirely synthetic — no real client, patient, or personnel
 information.
