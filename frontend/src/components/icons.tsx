@@ -7,6 +7,11 @@ const svgProps = {
   strokeWidth: 2,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
+  // Every icon here is decorative — adjacent text always labels the
+  // button/link it sits in — so hide them from assistive tech rather
+  // than letting screen readers announce a meaningless "graphic".
+  "aria-hidden": true,
+  focusable: "false" as const,
 };
 
 export function RefreshIcon({ className }: IconProps) {

@@ -238,9 +238,13 @@ export function SiteDetail({
       <section>
         <h3>AI Narrative Summary</h3>
         {summary ? (
-          <p className="summary-text">
+          <p className="summary-text" aria-live="polite">
             {summary}
-            {!summaryDone && <span className="cursor">▍</span>}
+            {!summaryDone && (
+              <span className="cursor" aria-hidden="true">
+                ▍
+              </span>
+            )}
           </p>
         ) : (
           <Skeleton lines={3} />

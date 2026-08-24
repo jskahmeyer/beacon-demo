@@ -31,6 +31,14 @@ export function SiteTable({
               key={site.id}
               className={site.id === selectedId ? "selected" : ""}
               onClick={() => onSelect(site.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelect(site.id);
+                }
+              }}
+              tabIndex={0}
+              aria-selected={site.id === selectedId}
             >
               <td>{site.name}</td>
               <td>{site.missedCheckIns}</td>

@@ -64,7 +64,7 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="signin-screen">
+      <main className="signin-screen">
         <div className="signin-card">
           <h1>Program Risk Monitor</h1>
           <p className="subtitle">Sign in with your Microsoft account to continue.</p>
@@ -73,7 +73,7 @@ export default function App() {
             Sign in with Microsoft
           </a>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -97,7 +97,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className="app">
+      <main className="app">
         {loading && <p style={{ padding: "0 24px" }}>Loading sites…</p>}
         {error && <p className="error">{error}</p>}
 
@@ -107,7 +107,7 @@ export default function App() {
             {selectedSite && <SiteDetail site={selectedSite} onActionUpdate={handleActionUpdate} />}
           </div>
         )}
-      </div>
+      </main>
     </>
   );
 }
