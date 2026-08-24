@@ -3,5 +3,5 @@ dist/
 .env
 api/local.settings.json
 .DS_Store
-README.md
+README-old.md
 WALKTHROUGH.md
