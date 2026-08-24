@@ -72,9 +72,6 @@ diff here:
   than leaving the model to invent its own scoring logic per call — the
   same site produces a consistent tier across runs, and the rationale
   traces back to specific thresholds instead of reading like a black box.
-- **Synthetic data only, deliberately.** Nothing resembling real health
-  data appears anywhere in the seed data or prompts — a conscious choice
-  for a HIPAA-adjacent product, not an afterthought.
 - **Accessibility and responsiveness were treated as functional
   requirements, not polish.** The site table (the app's primary navigation
   surface) is fully keyboard-operable, not mouse-only; the two-column
@@ -122,8 +119,9 @@ npm run lint
 npm run format
 ```
 
-A pre-commit hook (Husky + lint-staged) runs ESLint and Prettier on staged
-files automatically.
+A pre-commit hook (Husky + lint-staged) runs ESLint, Prettier, and both
+test suites automatically. Tests alone: `npm test` from the repo root, or
+`npm test` inside either `api/` or `frontend/` individually.
 
 ## Known limitations
 
@@ -134,8 +132,11 @@ files automatically.
   (and does stream locally against the Functions host directly). A
   standalone Function App would likely fix this; I hit an Azure subscription
   quota wall partway through that path and left it for later.
-- **No automated tests yet.** Lint/format tooling is wired up and enforced
-  via a pre-commit hook; test coverage is the natural next addition.
+- **Test coverage is intentionally narrow, not exhaustive.** It covers the
+  action-workflow state machine (`api/src/domain/actionWorkflow.ts`),
+  `formatRelativeTime`, and badge rendering — the places with real,
+  pure logic worth protecting. UI flows, the API handlers themselves, and
+  the LLM prompts aren't covered.
 - **Entra ID is single-tenant.** By design for this demo (see the live-demo
   note above), not a limitation of the approach itself.
 
@@ -144,6 +145,6 @@ files automatically.
 - A standalone Azure Function App to fix streaming in production.
 - A portfolio-level KPI summary (counts by tier, sites overdue on
   assessment) above the per-site table.
-- Automated tests — the risk-scoring rubric and the action-workflow state
-  machine are the two highest-value places to start.
+- Broader test coverage — the API handlers and key UI flows are the
+  natural next layer, beyond the current unit tests.
 - Real-time updates via WebSockets/SignalR instead of on-demand fetches.

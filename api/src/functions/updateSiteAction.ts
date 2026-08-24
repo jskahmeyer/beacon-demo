@@ -1,19 +1,7 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
 import { getSitesContainer } from "../data/cosmosClient";
 import { SiteMetrics } from "../types";
-
-type ActionStatus = NonNullable<SiteMetrics["actionStatus"]>;
-
-// Linear progression, with one exception: "resolved" cycles back to
-// "flagged" rather than being a true dead end — a resolved site can
-// always be reopened manually if new problems come up later, regardless
-// of what the AI's most recent assessment currently says.
-const NEXT_STATUS: Record<string, ActionStatus> = {
-  none: "flagged",
-  flagged: "acknowledged",
-  acknowledged: "resolved",
-  resolved: "flagged",
-};
+import { NEXT_STATUS, isValidTransition } from "../domain/actionWorkflow";
 
 app.http("updateSiteAction", {
   methods: ["POST"],
@@ -30,11 +18,11 @@ app.http("updateSiteAction", {
       if (!site) return { status: 404, jsonBody: { error: "Site not found." } };
 
       const current = site.actionStatus ?? "none";
-      if (status !== NEXT_STATUS[current]) {
+      if (!isValidTransition(current, status)) {
         return {
           status: 400,
           jsonBody: {
-            error: `Cannot move from "${current}" to "${status}". Expected "${NEXT_STATUS[current] ?? "no further transitions"}".`,
+            error: `Cannot move from "${current}" to "${status}". Expected "${NEXT_STATUS[current]}".`,
           },
         };
       }

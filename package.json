@@ -8,6 +8,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "npm test --prefix api && npm test --prefix frontend",
     "prepare": "husky"
   },
   "devDependencies": {
