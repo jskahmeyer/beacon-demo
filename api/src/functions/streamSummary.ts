@@ -15,6 +15,7 @@ app.http("streamSummary", {
   route: "sites/{id}/summary/stream",
   handler: async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     const id = request.params.id;
+    const force = request.query.get("force") === "true";
     const container = getSitesContainer();
     const { resource: site } = await container.item(id, id).read<SiteMetrics>();
 
@@ -27,10 +28,24 @@ app.http("streamSummary", {
     const body = new ReadableStream({
       async start(controller) {
         try {
+          if (!force && site.lastSummary) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token: site.lastSummary })}\n\n`));
+            controller.enqueue(encoder.encode("event: done\ndata: {}\n\n"));
+            return;
+          }
+
+          let fullText = "";
           for await (const chunk of streamNarrativeSummary(site as SiteMetrics)) {
+            fullText += chunk;
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token: chunk })}\n\n`));
           }
           controller.enqueue(encoder.encode("event: done\ndata: {}\n\n"));
+
+          // patch (not replace) — see the note in getRiskScore.ts.
+          await container.item(id, id).patch([
+            { op: "set", path: "/lastSummary", value: fullText },
+            { op: "set", path: "/lastAssessedAt", value: new Date().toISOString() },
+          ]);
         } catch (err) {
           context.error("streamSummary failed", err);
           controller.enqueue(

@@ -6,6 +6,9 @@ export interface SiteMetrics {
   incidentCount90d: number;
   staffingTurnoverPct: number;
   baselineTier: "low" | "moderate" | "high";
+  lastAssessment?: RiskAssessment;
+  lastSummary?: string;
+  lastAssessedAt?: string;
 }
 
 export interface RiskAssessment {
@@ -13,4 +16,8 @@ export interface RiskAssessment {
   tier: "low" | "moderate" | "high";
   rationale: string;
   flaggedFactors: string[];
+}
+
+export interface RiskAssessmentResponse extends RiskAssessment {
+  assessedAt: string;
 }

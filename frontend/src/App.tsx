@@ -5,6 +5,18 @@ import { ClientPrincipal, fetchCurrentUser, getLogoutUrl } from "./auth";
 import { SiteTable } from "./components/SiteTable";
 import { SiteDetail } from "./components/SiteDetail";
 
+// SWA's /.auth/* endpoints only exist once deployed — there's no real auth
+// to check against local `npm run dev`. Stubbing a signed-in user in dev
+// mode lets the rest of the app be tested locally; import.meta.env.DEV is
+// statically false in production builds, so this branch is dead-code-
+// eliminated and can never ship enabled.
+const DEV_USER: ClientPrincipal = {
+  identityProvider: "dev",
+  userId: "local-dev",
+  userDetails: "Local Dev User",
+  userRoles: ["authenticated"],
+};
+
 export default function App() {
   const [sites, setSites] = useState<SiteMetrics[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -14,7 +26,9 @@ export default function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    fetchCurrentUser().then((currentUser) => {
+    const resolveUser = import.meta.env.DEV ? Promise.resolve(DEV_USER) : fetchCurrentUser();
+
+    resolveUser.then((currentUser) => {
       setUser(currentUser);
       setAuthChecked(true);
 
