@@ -9,6 +9,8 @@ export interface SiteMetrics {
   lastAssessment?: RiskAssessment;
   lastSummary?: string;
   lastAssessedAt?: string;
+  actionStatus?: "flagged" | "acknowledged" | "resolved";
+  actionUpdatedAt?: string;
 }
 
 export interface RiskAssessment {

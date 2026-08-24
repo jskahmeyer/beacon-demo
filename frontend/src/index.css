@@ -58,7 +58,10 @@ header {
   white-space: nowrap;
 }
 
-.header-user a {
+.signout-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: #fff;
   text-decoration: underline;
 }
@@ -94,7 +97,9 @@ header {
 }
 
 .signin-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--yellow);
   color: var(--navy-dark);
   font-weight: 700;
@@ -190,6 +195,25 @@ header h1 {
   color: #a12626;
 }
 
+.badge-flagged {
+  background: #fde3c7;
+  color: #b35c00;
+}
+
+.badge-acknowledged {
+  background: #dbe7f5;
+  color: #1c5a99;
+}
+
+.badge-resolved {
+  background: #d9f2e0;
+  color: #1a7a3e;
+}
+
+.no-action {
+  color: var(--muted);
+}
+
 .site-detail {
   background: var(--navy);
   color: #fff;
@@ -220,6 +244,19 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.action-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .gauge {
@@ -277,6 +314,9 @@ header h1 {
 }
 
 .rerun-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.4);
   color: #fff;
@@ -285,6 +325,22 @@ header h1 {
   padding: 4px 10px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.btn-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.btn-icon-spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .rerun-button:hover:not(:disabled) {

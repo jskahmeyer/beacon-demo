@@ -4,6 +4,7 @@ import { fetchSites } from "./api";
 import { ClientPrincipal, fetchCurrentUser, getLogoutUrl } from "./auth";
 import { SiteTable } from "./components/SiteTable";
 import { SiteDetail } from "./components/SiteDetail";
+import { LogInIcon, LogOutIcon } from "./components/icons";
 
 // SWA's /.auth/* endpoints only exist once deployed — there's no real auth
 // to check against local `npm run dev`. Stubbing a signed-in user in dev
@@ -49,6 +50,14 @@ export default function App() {
 
   const selectedSite = sites.find((s) => s.id === selectedId) ?? null;
 
+  const handleActionUpdate = (
+    siteId: string,
+    actionStatus: SiteMetrics["actionStatus"],
+    actionUpdatedAt: string
+  ) => {
+    setSites((prev) => prev.map((s) => (s.id === siteId ? { ...s, actionStatus, actionUpdatedAt } : s)));
+  };
+
   if (!authChecked) return null;
 
   if (!user) {
@@ -58,6 +67,7 @@ export default function App() {
           <h1>Program Risk Monitor</h1>
           <p className="subtitle">Sign in with your Microsoft account to continue.</p>
           <a className="signin-button" href="/.auth/login/aad">
+            <LogInIcon className="btn-icon" />
             Sign in with Microsoft
           </a>
         </div>
@@ -76,7 +86,10 @@ export default function App() {
           {user && (
             <div className="header-user">
               <span>{user.userDetails}</span>
-              <a href={getLogoutUrl()}>Sign out</a>
+              <a className="signout-link" href={getLogoutUrl()}>
+                <LogOutIcon className="btn-icon" />
+                Sign out
+              </a>
             </div>
           )}
         </div>
@@ -89,7 +102,7 @@ export default function App() {
         {!loading && !error && (
           <div className="layout">
             <SiteTable sites={sites} selectedId={selectedId} onSelect={setSelectedId} />
-            {selectedSite && <SiteDetail site={selectedSite} />}
+            {selectedSite && <SiteDetail site={selectedSite} onActionUpdate={handleActionUpdate} />}
           </div>
         )}
       </div>

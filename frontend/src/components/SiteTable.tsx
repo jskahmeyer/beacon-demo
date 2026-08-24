@@ -1,5 +1,6 @@
 import { SiteMetrics } from "../types";
 import { RiskBadge } from "./RiskBadge";
+import { ActionBadge } from "./ActionBadge";
 
 export function SiteTable({
   sites,
@@ -20,6 +21,7 @@ export function SiteTable({
           <th>Incidents (90d)</th>
           <th>Staff Turnover</th>
           <th>Baseline Risk</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -36,6 +38,13 @@ export function SiteTable({
             <td>{site.staffingTurnoverPct}%</td>
             <td>
               <RiskBadge tier={site.baselineTier} />
+            </td>
+            <td>
+              {site.actionStatus ? (
+                <ActionBadge status={site.actionStatus} />
+              ) : (
+                <span className="no-action">—</span>
+              )}
             </td>
           </tr>
         ))}

@@ -1,5 +1,7 @@
 import { SiteMetrics, RiskAssessmentResponse } from "./types";
 
+type ActionStatus = NonNullable<SiteMetrics["actionStatus"]>;
+
 export async function fetchSites(): Promise<SiteMetrics[]> {
   const res = await fetch("/api/sites");
   if (!res.ok) throw new Error("Failed to load sites.");
@@ -42,4 +44,17 @@ export function streamSummary(
   });
 
   return () => source.close();
+}
+
+export async function updateSiteAction(
+  id: string,
+  status: ActionStatus
+): Promise<{ actionStatus: ActionStatus; actionUpdatedAt: string }> {
+  const res = await fetch(`/api/sites/${id}/action`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) throw new Error("Failed to update action status.");
+  return res.json();
 }
