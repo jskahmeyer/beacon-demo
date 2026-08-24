@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SiteMetrics, RiskAssessmentResponse } from "../types";
 import { fetchRiskScore, streamSummary, updateSiteAction } from "../api";
 import { formatRelativeTime } from "../utils/formatRelativeTime";
@@ -35,7 +35,11 @@ export function SiteDetail({
   onActionUpdate,
 }: {
   site: SiteMetrics;
-  onActionUpdate: (siteId: string, actionStatus: SiteMetrics["actionStatus"], actionUpdatedAt: string) => void;
+  onActionUpdate: (
+    siteId: string,
+    actionStatus: SiteMetrics["actionStatus"],
+    actionUpdatedAt: string
+  ) => void;
 }) {
   const [assessment, setAssessment] = useState<RiskAssessmentResponse | null>(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
@@ -53,46 +57,52 @@ export function SiteDetail({
   // both invocations' fetches resolve and race to call setAssessment,
   // which is exactly the kind of bug StrictMode's double-invoke exists to
   // surface.
-  const loadAssessment = (force: boolean, isStale: () => boolean = () => false) =>
-    fetchRiskScore(site.id, { force })
-      .then((data) => {
-        if (!isStale()) setAssessment(data);
-      })
-      .catch(() => {
-        if (!isStale()) setError("Couldn't generate a risk assessment.");
-      });
+  const loadAssessment = useCallback(
+    (force: boolean, isStale: () => boolean = () => false) =>
+      fetchRiskScore(site.id, { force })
+        .then((data) => {
+          if (!isStale()) setAssessment(data);
+        })
+        .catch(() => {
+          if (!isStale()) setError("Couldn't generate a risk assessment.");
+        }),
+    [site.id]
+  );
 
-  const loadSummary = (force: boolean, isStale: () => boolean = () => false) => {
-    stopStreamingRef.current?.();
-    setSummaryDone(false);
-    let firstToken = true;
+  const loadSummary = useCallback(
+    (force: boolean, isStale: () => boolean = () => false) => {
+      stopStreamingRef.current?.();
+      setSummaryDone(false);
+      let firstToken = true;
 
-    stopStreamingRef.current = streamSummary(
-      site.id,
-      (token) => {
-        if (isStale()) return;
-        // On rerun, replace the old summary with the first new token instead
-        // of appending, so stale content doesn't linger mid-sentence — but
-        // don't blank it out before the new stream starts, to avoid a flash
-        // of the skeleton for content we're about to replace anyway.
-        // isFirst is captured synchronously here, not read inside the
-        // setSummary updater — React applies updaters lazily, and if the
-        // EventSource delivers several tokens in the same synchronous burst,
-        // every updater would otherwise see firstToken as already flipped
-        // to false by the time any of them actually runs.
-        const isFirst = firstToken;
-        firstToken = false;
-        setSummary((prev) => (isFirst ? token : prev + token));
-      },
-      () => {
-        if (!isStale()) setSummaryDone(true);
-      },
-      (message) => {
-        if (!isStale()) setError(message);
-      },
-      { force }
-    );
-  };
+      stopStreamingRef.current = streamSummary(
+        site.id,
+        (token) => {
+          if (isStale()) return;
+          // On rerun, replace the old summary with the first new token instead
+          // of appending, so stale content doesn't linger mid-sentence — but
+          // don't blank it out before the new stream starts, to avoid a flash
+          // of the skeleton for content we're about to replace anyway.
+          // isFirst is captured synchronously here, not read inside the
+          // setSummary updater — React applies updaters lazily, and if the
+          // EventSource delivers several tokens in the same synchronous burst,
+          // every updater would otherwise see firstToken as already flipped
+          // to false by the time any of them actually runs.
+          const isFirst = firstToken;
+          firstToken = false;
+          setSummary((prev) => (isFirst ? token : prev + token));
+        },
+        () => {
+          if (!isStale()) setSummaryDone(true);
+        },
+        (message) => {
+          if (!isStale()) setError(message);
+        },
+        { force }
+      );
+    },
+    [site.id]
+  );
 
   useEffect(() => {
     let stale = false;
@@ -112,7 +122,7 @@ export function SiteDetail({
       stale = true;
       stopStreamingRef.current?.();
     };
-  }, [site.id]);
+  }, [site.id, loadAssessment, loadSummary]);
 
   const handleRerun = () => {
     setRerunning(true);
@@ -125,7 +135,9 @@ export function SiteDetail({
     setActionPending(true);
     setError(null);
     updateSiteAction(site.id, status)
-      .then(({ actionStatus, actionUpdatedAt }) => onActionUpdate(site.id, actionStatus, actionUpdatedAt))
+      .then(({ actionStatus, actionUpdatedAt }) =>
+        onActionUpdate(site.id, actionStatus, actionUpdatedAt)
+      )
       .catch(() => setError("Couldn't update the follow-up action."))
       .finally(() => setActionPending(false));
   };
@@ -138,7 +150,9 @@ export function SiteDetail({
 
       {assessment && (
         <div className="assessment-meta">
-          <span className="assessed-at">Last assessed {formatRelativeTime(assessment.assessedAt)}</span>
+          <span className="assessed-at">
+            Last assessed {formatRelativeTime(assessment.assessedAt)}
+          </span>
           <button
             type="button"
             className="rerun-button"

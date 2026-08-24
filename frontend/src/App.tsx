@@ -55,7 +55,9 @@ export default function App() {
     actionStatus: SiteMetrics["actionStatus"],
     actionUpdatedAt: string
   ) => {
-    setSites((prev) => prev.map((s) => (s.id === siteId ? { ...s, actionStatus, actionUpdatedAt } : s)));
+    setSites((prev) =>
+      prev.map((s) => (s.id === siteId ? { ...s, actionStatus, actionUpdatedAt } : s))
+    );
   };
 
   if (!authChecked) return null;

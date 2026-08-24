@@ -29,7 +29,9 @@ app.http("streamSummary", {
       async start(controller) {
         try {
           if (!force && site.lastSummary) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ token: site.lastSummary })}\n\n`));
+            controller.enqueue(
+              encoder.encode(`data: ${JSON.stringify({ token: site.lastSummary })}\n\n`)
+            );
             controller.enqueue(encoder.encode("event: done\ndata: {}\n\n"));
             return;
           }
@@ -49,7 +51,9 @@ app.http("streamSummary", {
         } catch (err) {
           context.error("streamSummary failed", err);
           controller.enqueue(
-            encoder.encode(`event: error\ndata: ${JSON.stringify({ message: "Stream failed." })}\n\n`)
+            encoder.encode(
+              `event: error\ndata: ${JSON.stringify({ message: "Stream failed." })}\n\n`
+            )
           );
         } finally {
           controller.close();
@@ -62,7 +66,7 @@ app.http("streamSummary", {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
+        Connection: "keep-alive",
       },
       body,
     };
