@@ -14,10 +14,15 @@ interview itself.
 
 **[orange-meadow-04bcb011e.7.azurestaticapps.net](https://orange-meadow-04bcb011e.7.azurestaticapps.net/)**
 
-The app is gated behind Microsoft (Entra ID) sign-in, scoped to my own Azure
-tenant — if you land on a Microsoft login you can't get past, that's why.
-The [Local setup](#local-setup) section below gets it running without that
-restriction.
+The app is gated behind Microsoft (Entra ID) sign-in — any Microsoft
+account works, work/school or personal. It's deliberately registered this
+broadly (rather than single-tenant) so an outside reviewer can sign in
+without needing an invite into my tenant first. Single-tenant,
+scoped to just the organization's own accounts, is the more correct
+choice for an actual production deployment — this is loosened
+specifically for demo reviewability, not how I'd ship it. The
+[Local setup](#local-setup) section below is the other way to run it,
+without any sign-in at all.
 
 ## What it does
 
@@ -137,8 +142,9 @@ test suites automatically. Tests alone: `npm test` from the repo root, or
   `formatRelativeTime`, and badge rendering — the places with real,
   pure logic worth protecting. UI flows, the API handlers themselves, and
   the LLM prompts aren't covered.
-- **Entra ID is single-tenant.** By design for this demo (see the live-demo
-  note above), not a limitation of the approach itself.
+- **Entra ID accepts any Microsoft account, not just the organization's
+  own**, so reviewers can sign in without an invite (see the live-demo
+  note above). A real deployment would scope this down to single-tenant.
 
 ## Possible next steps
 
